@@ -1,0 +1,151 @@
+﻿/* Gabriel_Siqueira 1210689 3WA */
+/* Noemie_Nakamura 1110743 3WA */
+
+------------------------------------------------------------
+	RELATÓRIO DE DESENVOLVIMENTO 
+------------------------------------------------------------
+
+O objetivo deste trabalho é desenvolver, em C, uma função 
+gera que implementa um pequeno gerador de código (um "micro-
+compilador") para uma linguagem de programação bastante simples,
+chamada SB.
+
+Para uma verificação mais rápida do código de máquina para cada 
+instrução, utilizamos o seguinte script de shell: 
+
+cd /var/tmp
+echo $1 > asmtomach.s
+gcc -m32 -c asmtomach.s
+objdump -d asmtomach.o | grep '[0-9a-f][0-9a-f] ' | grep -v '00000000 <.text>' | cut -c 7-
+cd - 2>&1 >/dev/null 
+
+Para verificação do que ocorria na memória e se o resultado 
+obtido correspondia ao esperado, utilizamos uma função 'dump':
+
+void dump(unsigned char *codigo, int n){
+    int i;
+    for(i = 0; i < n_bytes; i++){
+    	printf("%d\t%02x\n", i, codigo[i]);
+    }
+}
+
+A função 'error' foi disponibilizada para o trabalho assim
+como a função de leitura dos caracteres do arquivo de entrada,
+que sofreu adaptações para este trabalho.
+
+------------------------------------------------------------
+	1 - Casos de teste
+------------------------------------------------------------
+# Teste com retorno de um número pequeno
+	function
+	ret? $0 $1
+	end
+
+# Teste com retorno de um número grande
+	function
+	ret? $0 $1032
+	end
+
+# Teste com retorno de uma variável
+
+	# Operação de soma de dois números	
+	function
+	v0 = $1 + $1
+	ret? $0 v0
+	end
+
+	# Operação de subtração de dois números
+	function
+	v0 = $3 - $2
+	ret? $0 v0
+	end
+
+	# Operação de multiplicação de dois números
+	function
+	v0 = p0 * $5
+	v1 = p0 * $2
+	v2 = v0 * v1
+	ret? $0 v2
+	end
+
+# Teste com retorno de um parâmetro
+	
+	# Operação de soma	
+	function
+	v0 = $1 + $9
+	p0 = $5 + v0
+	end
+
+	# Operação de subtração de dois números
+	function
+	p0 = p0 - $10
+	ret? $0 p0
+	end
+
+	# Operação de multiplicação de dois números
+	function
+	p0 = p0 * p0
+	p1 = p0 * $2
+	p2 = p0 * p1
+	ret? $0 p2
+	end
+
+# Verificação de retorno inválido seguido de válido
+	function
+	v0 = $1 + $2
+	ret? v0 $1
+	ret? $0 $4
+	end
+
+# Teste com retorno condicional
+	
+	# Verificação de retorno com variável
+	function
+	v0 = $0 + $0
+	p0 = p0 * $2
+	ret? v0 p0
+	end
+
+	# Verificação de retorno com parâmetro
+	function
+	p0 = p0 - $2
+	ret? p0 $1
+	end
+
+# Teste com call
+	
+	# Fatorial
+	function
+	ret? p0 $1
+	v0 = p0 - $1
+	v1 = call 0 v0
+	v0 = p0 * v1
+	ret? $0 v0
+	end
+
+	# Dobro
+	function
+	p0 = p0 * $2
+	ret? $0 p0
+	end
+	function
+	v0 = call 0 p0
+	ret? $0 v0
+	end
+
+------------------------------------------------------------
+	2 - Parte funcional
+------------------------------------------------------------
+Os resultados obtidos nos testes de todas as funções foram
+conforme o esperado, demonstrando a corretude do módulo.
+
+------------------------------------------------------------
+	3 - Parte não funcional
+------------------------------------------------------------
+
+------------------------------------------------------------
+	4 - Fontes
+------------------------------------------------------------
+
+http://www.cplusplus.com/reference/cstdio/
+http://www.cs.swarthmore.edu/~newhall/unixhelp/C_files.html

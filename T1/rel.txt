@@ -1,0 +1,82 @@
+/* Gabriel da Silva Siqueira - 1210689 */
+
+Considerações gerais:
+
+- Após uma série de testes, todas as funções parecem estar funcionando corretamente.
+- Todos os bugs que consegui encontrar durante a fase de teste foram corrigidos.
+
+Considerações individuais
+
+/* res = val (extensao com sinal) */		100%
+void big_val (BigInt res, int val);
+
+- Testada com valores positivos, negativos e zero. Foram escolhidos valores intermediários (como 3, -3, 300, -300, etc) tal como valores limite(65536, -65536, 2147483647, -2147483647)
+
+---------------------------------------------------------------------------------------------------
+/* res = uval (extensao sem sinal) */		100%
+void big_uval (BigInt res, unsigned int uval);
+
+-Testada com valores positivos e zero. Foram escolhidos valores intermediários(como 3, 300, etc) tal como valores limite(65536, 16777215, 4294967295)
+
+---------------------------------------------------------------------------------------------------
+
+/* res = a + b */							100%
+void big_sum (BigInt res, BigInt a, BigInt b);
+
+-Testada com pares de positivos, pares de negativos, um positivo e um negativo(e vice e versa), e combinações com zero. Foram escolhidos valores intermediários e valores limite.
+Exemplos: (-2000, -5000), (65536, 65536), (1000, 0), (20000, -19999), etc
+
+---------------------------------------------------------------------------------------------------
+/* res = a - b */							100%
+void big_sub (BigInt res, BigInt a, BigInt b);
+-Testada com os mesmos casos de teste da função big_sum (devido à maneira de implementação)
+
+---------------------------------------------------------------------------------------------------
+/* res = a * b (com sinal) */				100%
+void big_mul (BigInt res, BigInt a, BigInt b);
+
+-Testada com pares de positivos, pares de negativos, um positivo e um negativo(e vice e versa), e combinações com zero. Foram utilizados valores grandes e pequenos.
+Exemplos: (1000, 0), (0,-1000), (50000, 50000), (-50000, 50000), (50000, -50000), etc
+---------------------------------------------------------------------------------------------------
+/* res = a * b (sem sinal) */				100%
+void big_umul (BigInt res, BigInt a, BigInt b);
+
+-Testada com números positivos grandes e pequenos, e combinações com zero.
+Exemplos: (1000, 0), (0, 1000), (50000,50000),(29,84) etc
+---------------------------------------------------------------------------------------------------
+
+/* res = a << n */							100%
+void big_shl (BigInt res, BigInt a, int n);
+
+-Testada com diferentes valores de n, com valores dos intervalos (0 a 8), (8 a 128) e (>128)
+-Foram utilizados inteiros fáceis de serem visualizados (como -1) mas não apenas.
+---------------------------------------------------------------------------------------------------
+/* res = a >> n (logico) */					100%
+void big_shr (BigInt res, BigInt a, int n);
+
+-Testada com os mesmos casos de teste da função big_shl (devido à maneira de implementação)
+---------------------------------------------------------------------------------------------------
+/* comparacao com sinal */					100%
+int big_cmp(BigInt a, BigInt b);
+
+-Testada com pares de negativos(maior,menor) e (menor, maior), pares de positivos(maior,menor) e (menor, maior), par de zeros e pares intercalando os tres tipos(+,- e 0). Foram utilizados valores pequenos, médios e grandes.
+Exemplos: (1000000, 0),(0, -1000000), (0, 0), (-1000000, -999999), etc
+
+---------------------------------------------------------------------------------------------------
+/* comparacao sem sinal */					100%
+int big_ucmp(BigInt a, BigInt b);
+
+-Testada com pares de positivos(maior,menor) e (menor, maior), par de zeros, e pares intercalando os dois tipos(+,0). Foram utilizados valores pequenos, médios e grandes.
+---------------------------------------------------------------------------------------------------
+/*Funcoes extras*/
+
+/* Devolve o complemento a 2 do numero */	100%
+void compl2(BigInt res,BigInt a);
+
+-Testada com os mesmo casos de teste de big_val;
+
+---------------------------------------------------------------------------------------------------
+/*Devolve uma cópia do numero fornecido */
+void big_copy(BigInt res, BigInt a);		100%
+
+-Testada com os mesmo casos de teste de big_val;
